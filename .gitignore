@@ -6,6 +6,10 @@
 /out-tsc
 /bazel-out
 
+# Secrets
+/Dockerfile
+/docker-compose.yaml
+
 # Node
 /node_modules
 npm-debug.log
