@@ -1,15 +1,16 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AuthService } from "./auth.service";
-import * as authActions from "./auth.actions";
+import { Store } from "@ngrx/store";
+import { User } from "@root/user/user.model";
 import { catchError, exhaustMap, first, map, of } from "rxjs";
+
+import * as userActions from "../user/user.actions";
+import * as authActions from "./auth.actions";
+import { AuthService } from "./auth.service";
 import { LoginDTO } from "./login/login.dto";
 import { LoginSuccessRTO } from "./login/login-success.rto";
-import { Store } from "@ngrx/store";
-import * as userActions from "../user/user.actions";
 import { SignupDTO } from "./signup/signup.dto";
 import { SignupSuccessRTO } from "./signup/signup-success.rto";
-import { User } from "@root/user/user.model";
 
 @Injectable()
 export class AuthEffects {

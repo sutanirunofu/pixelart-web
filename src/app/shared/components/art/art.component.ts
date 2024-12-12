@@ -1,6 +1,7 @@
 import { NgStyle } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { Art } from "@root/art/art.model";
+
 import { RenderArt } from "./render-art.model";
 
 @Component({
@@ -12,7 +13,7 @@ import { RenderArt } from "./render-art.model";
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtComponent implements OnInit {
-    private colorCache: { [key: number]: string } = {};
+    private colorCache: Record<number, string> = {};
 
     @Input({ required: true }) public art: Art = { id: "", title: "", map: [], colors: [], publicationDate: new Date() };
     public renderArt: RenderArt = { title: "", data: [], publicationDate: new Date() };

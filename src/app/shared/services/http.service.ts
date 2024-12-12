@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { map, Observable, retry, timeout } from "rxjs";
-import { PixelartConstants } from "../utils/constants";
+import { Observable } from "rxjs";
+
+import { PIXEL_CONSTANTS } from "../utils/constants";
 import { LocalStorageService } from "./local-storage.service";
 
 @Injectable({
@@ -42,12 +43,13 @@ export class HttpService {
     /* ---------- PRIVATE ---------- */
 
     private getAPIOrigin(): string {
-        if (typeof location === "undefined") return "http://localhost:8081";
-        return `${location.protocol}//${location.hostname}:${this.API_PORT}`;
+        // if (typeof location === "undefined") return "http://localhost:8081";
+        // return `${location.protocol}//${location.hostname}:${this.API_PORT}`;
+        return "https://pixelart-api.onrender.com";
     }
 
     private getAuthorization(): string {
-        const accessToken = this.localStorageService.get(PixelartConstants.LOCAL_STORAGE.ACCESS_TOKEN);
+        const accessToken = this.localStorageService.get(PIXEL_CONSTANTS.LOCAL_STORAGE.ACCESS_TOKEN);
         if (!accessToken) return "";
         return `Bearer ${accessToken}`;
     }

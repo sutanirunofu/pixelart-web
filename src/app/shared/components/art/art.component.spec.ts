@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ArtComponent } from './art.component';
+import { ArtComponent } from "./art.component";
 
-describe('ArtComponent', () => {
-  let component: ArtComponent;
-  let fixture: ComponentFixture<ArtComponent>;
+describe("ArtComponent", () => {
+    let component: ArtComponent;
+    let fixture: ComponentFixture<ArtComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ArtComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [ArtComponent],
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(ArtComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(ArtComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it("should create", () => {
+        expect(component).toBeTruthy();
+    });
 });

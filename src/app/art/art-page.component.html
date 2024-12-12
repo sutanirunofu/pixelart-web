@@ -1,7 +1,7 @@
 <div class="art-page">
     <div class="container">
         <div class="arts">
-            @for(art of arts$ | async; track $index) {
+            @for (art of arts$ | async; track $index) {
                 <pixelart-art [art]="art" />
             }
         </div>

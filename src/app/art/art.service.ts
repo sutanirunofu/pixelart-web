@@ -1,8 +1,9 @@
+import { HttpResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { HttpService } from "@root/shared/services/http.service";
+import { first, map, Observable } from "rxjs";
+
 import { Art } from "./art.model";
-import { first, map, Observable, reduce } from "rxjs";
-import { HttpResponse } from "@angular/common/http";
 
 @Injectable({
     providedIn: "root",

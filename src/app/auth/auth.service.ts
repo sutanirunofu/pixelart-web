@@ -1,14 +1,14 @@
-import { inject, Injectable } from "@angular/core";
-
-import { SignupDTO } from "./signup/signup.dto";
-import { LoginDTO } from "./login/login.dto";
-import { PixelartConstants } from "../shared/utils/constants";
-import { EMPTY, first, map, Observable, of } from "rxjs";
-import { AccessTokens, LoginSuccessRTO } from "./login/login-success.rto";
-import { SignupSuccessRTO } from "./signup/signup-success.rto";
 import { HttpResponse } from "@angular/common/http";
-import { User } from "@root/user/user.model";
+import { inject, Injectable } from "@angular/core";
 import { HttpService } from "@root/shared/services/http.service";
+import { User } from "@root/user/user.model";
+import { EMPTY, first, map, Observable, of } from "rxjs";
+
+import { PIXEL_CONSTANTS } from "../shared/utils/constants";
+import { LoginDTO } from "./login/login.dto";
+import { AccessTokens, LoginSuccessRTO } from "./login/login-success.rto";
+import { SignupDTO } from "./signup/signup.dto";
+import { SignupSuccessRTO } from "./signup/signup-success.rto";
 
 @Injectable({
     providedIn: "root",
@@ -49,14 +49,14 @@ export class AuthService {
     }
 
     public logout(): Observable<never> {
-        localStorage.removeItem(PixelartConstants.LOCAL_STORAGE.ACCESS_TOKEN);
-        localStorage.removeItem(PixelartConstants.LOCAL_STORAGE.REFRESH_TOKEN);
+        localStorage.removeItem(PIXEL_CONSTANTS.LOCAL_STORAGE.ACCESS_TOKEN);
+        localStorage.removeItem(PIXEL_CONSTANTS.LOCAL_STORAGE.REFRESH_TOKEN);
 
         return EMPTY;
     }
 
     public updateAccessToken(): Observable<boolean> {
-        const refreshToken = localStorage.getItem(PixelartConstants.LOCAL_STORAGE.REFRESH_TOKEN);
+        const refreshToken = localStorage.getItem(PIXEL_CONSTANTS.LOCAL_STORAGE.REFRESH_TOKEN);
 
         if (!refreshToken) return of(false);
 
@@ -72,14 +72,14 @@ export class AuthService {
                 first(),
                 map((response: HttpResponse<{ accessToken: string }>) => {
                     if (!response.body) throw Error("[Auth API] Update Access Token: Body not found!");
-                    localStorage.setItem(PixelartConstants.LOCAL_STORAGE.ACCESS_TOKEN, response.body.accessToken);
+                    localStorage.setItem(PIXEL_CONSTANTS.LOCAL_STORAGE.ACCESS_TOKEN, response.body.accessToken);
                     return true;
                 }),
             );
     }
 
     public setTokens(tokens: AccessTokens): void {
-        localStorage.setItem(PixelartConstants.LOCAL_STORAGE.ACCESS_TOKEN, tokens.accessToken);
-        localStorage.setItem(PixelartConstants.LOCAL_STORAGE.REFRESH_TOKEN, tokens.refreshToken);
+        localStorage.setItem(PIXEL_CONSTANTS.LOCAL_STORAGE.ACCESS_TOKEN, tokens.accessToken);
+        localStorage.setItem(PIXEL_CONSTANTS.LOCAL_STORAGE.REFRESH_TOKEN, tokens.refreshToken);
     }
 }

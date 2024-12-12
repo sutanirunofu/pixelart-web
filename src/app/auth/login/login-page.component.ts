@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { Store } from "@ngrx/store";
-import * as authActions from "../auth.actions";
 import { Router, RouterModule } from "@angular/router";
-import { selectAuthorized, selectAuthPending } from "../auth.selectors";
+import { Store } from "@ngrx/store";
 import { first } from "rxjs";
+
+import * as authActions from "../auth.actions";
+import { selectAuthorized, selectAuthPending } from "../auth.selectors";
 
 @Component({
     selector: "pixelart-login-page",

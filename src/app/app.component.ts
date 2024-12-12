@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { Store } from "@ngrx/store";
+
 import { authorize } from "./auth/auth.actions";
 import { NavbarComponent } from "./shared/components/navbar/navbar.component";
 

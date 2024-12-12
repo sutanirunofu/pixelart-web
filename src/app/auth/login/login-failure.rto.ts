@@ -1,4 +1,4 @@
 export interface LoginFailureRTO {
-  message: string;
-  cause?: string;
+    message: string;
+    cause?: string;
 }

@@ -1,10 +1,11 @@
-import { Component, inject } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { selectUserFirstname, selectUserUsername } from "./user.selectors";
 import { CommonModule } from "@angular/common";
-import { selectAuthorized } from "@root/auth/auth.selectors";
-import * as authActions from "@root/auth/auth.actions";
+import { Component, inject } from "@angular/core";
 import { Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import * as authActions from "@root/auth/auth.actions";
+import { selectAuthorized } from "@root/auth/auth.selectors";
+
+import { selectUserFirstname, selectUserUsername } from "./user.selectors";
 
 @Component({
     selector: "pixelart-user-page",

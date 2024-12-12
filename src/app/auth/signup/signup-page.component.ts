@@ -1,10 +1,11 @@
-import { Component, inject } from "@angular/core";
-import { Store } from "@ngrx/store";
-import * as authActions from "../auth.actions";
-import { Router, RouterModule } from "@angular/router";
-import { selectAuthorized, selectAuthPending } from "../auth.selectors";
 import { CommonModule } from "@angular/common";
+import { Component, inject, OnInit } from "@angular/core";
+import { Router, RouterModule } from "@angular/router";
+import { Store } from "@ngrx/store";
 import { first } from "rxjs";
+
+import * as authActions from "../auth.actions";
+import { selectAuthorized, selectAuthPending } from "../auth.selectors";
 
 @Component({
     selector: "pixelart-signup-page",
@@ -13,7 +14,7 @@ import { first } from "rxjs";
     templateUrl: "./signup-page.component.html",
     styleUrl: "./signup-page.component.scss",
 })
-export class SignupPageComponent {
+export class SignupPageComponent implements OnInit {
     private readonly store = inject(Store);
     private readonly router = inject(Router);
 

@@ -1,6 +1,6 @@
 import { NgClass } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import { ActivatedRoute, NavigationEnd, Router, RouterModule } from "@angular/router";
+import { NavigationEnd, Router, RouterModule } from "@angular/router";
 import { filter } from "rxjs";
 
 @Component({

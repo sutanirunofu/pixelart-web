@@ -1,14 +1,15 @@
-import { HttpEvent, HttpHandler, HttpInterceptorFn, HttpRequest, HttpResponse } from "@angular/common/http";
+import { HttpEvent, HttpHandler, HttpRequest, HttpResponse } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { map, Observable, retry, timeout } from "rxjs";
+
 import { LocalStorageService } from "../services/local-storage.service";
-import { PixelartConstants } from "../utils/constants";
+import { PIXEL_CONSTANTS } from "../utils/constants";
 
 export class HttpInterceptor implements HttpInterceptor {
     private readonly localStorageService = inject(LocalStorageService);
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const accessToken = this.localStorageService.get(PixelartConstants.LOCAL_STORAGE.ACCESS_TOKEN);
+        const accessToken = this.localStorageService.get(PIXEL_CONSTANTS.LOCAL_STORAGE.ACCESS_TOKEN);
 
         if (accessToken) {
             request.headers.append("Authorization", `Bearer ${accessToken}`);
@@ -26,7 +27,7 @@ export class HttpInterceptor implements HttpInterceptor {
 
                 if (auth) {
                     const accessToken = auth.split(" ")[1];
-                    this.localStorageService.set(PixelartConstants.LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
+                    this.localStorageService.set(PIXEL_CONSTANTS.LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
                 }
             }
 

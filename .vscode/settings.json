@@ -1,7 +1,5 @@
 {
-    "cSpell.words": [
-        "firstname",
-        "pixelart"
-    ],
-    "cSpell.language": "en,ru"
+    "cSpell.words": ["firstname", "pixelart"],
+    "cSpell.language": "en,ru",
+    "deno.enable": false
 }
