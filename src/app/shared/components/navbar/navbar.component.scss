@@ -1,0 +1,79 @@
+@import "@root/variables.scss";
+
+.navbar {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+
+    .top-line {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(0.25turn, $color-blue, $color-purple, $color-red);
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
+        max-width: $container-width;
+        margin: 0 auto;
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: 100%;
+            height: 100%;
+
+            .buttons-item {
+                width: 100%;
+                height: 100%;
+
+                a {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+
+                    .icon {
+                        width: 26px;
+                        height: 26px;
+                        background-repeat: no-repeat;
+                        background-size: contain;
+                        background-position: center;
+                        transition: background-image $anim-time $anim-mode;
+                    }
+                }
+
+                &.arts > a > .icon {
+                    width: 30px;
+                    height: 30px;
+                }
+
+                &.profile > a > .icon {
+                    background-image: url("../../../../../public/shared/components/navbar/profile.svg");
+                }
+                &.profile.active > a > .icon {
+                    background-image: url("../../../../../public/shared/components/navbar/profile-active.svg");
+                }
+
+                &.arts > a > .icon {
+                    background-image: url("../../../../../public/shared/components/navbar/home.svg");
+                }
+                &.arts.active > a > .icon {
+                    background-image: url("../../../../../public/shared/components/navbar/home-active.svg");
+                }
+
+                &.saved > a > .icon {
+                    background-image: url("../../../../../public/shared/components/navbar/save.svg");
+                }
+                &.saved.active > a > .icon {
+                    background-image: url("../../../../../public/shared/components/navbar/save-active.svg");
+                }
+            }
+        }
+    }
+}

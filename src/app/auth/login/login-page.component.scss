@@ -1,0 +1,103 @@
+@import "@root/variables.scss";
+
+.login-page {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    overflow: hidden;
+
+    .background {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: $container-width;
+        margin: 0 auto;
+
+        .logo {
+            h1 {
+                font-family: "Pixelify Sans", sans-serif;
+                color: #ffffff;
+                font-size: 52px;
+                font-weight: 400;
+            }
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $gap-s;
+            width: 100%;
+            height: fit-content;
+
+            input, button {
+                width: 100%;
+                max-width: $button-max-width;
+                height: $button-height;
+                background-color: #ffffff30;
+                border-radius: 100px;
+                border: none;
+                outline: none;
+                color: #ffffff;
+                text-align: center;
+                backdrop-filter: blur(2px);
+                transition: box-shadow $anim-time $anim-mode;
+
+                &::placeholder {
+                    color: $color-gray-placeholder;
+                }
+
+                &:hover {
+                    box-shadow: 0 0 8px #ffffff;
+                }
+            }
+
+            button {
+                margin-top: $gap-m;
+                background-color: #0FB50080;
+                cursor: pointer;
+            }
+        }
+    }
+
+    footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        background-color: $color-black;
+
+        p, a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        a {
+            border-bottom: 1px solid $color-blue;
+        }
+    }
+}

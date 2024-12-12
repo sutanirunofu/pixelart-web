@@ -1,0 +1,14 @@
+<div class="art">
+    @for (row of renderArt.data; track $index) {
+        <div class="row">
+            @for (color of row; track $index) {
+                <div
+                    class="pixel"
+                    [ngStyle]="{
+                        backgroundColor: color,
+                    }"
+                ></div>
+            }
+        </div>
+    }
+</div>
