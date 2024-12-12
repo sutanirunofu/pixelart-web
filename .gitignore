@@ -8,7 +8,7 @@
 
 # Secrets
 /Dockerfile
-/docker-compose.yaml
+/docker-*.yaml
 
 # Node
 /node_modules
