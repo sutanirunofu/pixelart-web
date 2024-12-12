@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: pixelart
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 82363newlife
+  app:
+    image: sutanisurofu/pixelart
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    environment:
+      POSTGRES_URL: jdbc:postgresql://db:5432/pixelart
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 82363newlife
+      JWT_SECRET: KQDCCZEPL72YXXZX9I7JJ8QQ6B85IG56A2ARRU941PHTI3G1AI773FRL40R89B3A
+  web:
+    image: sutanisurofu/pixelart-web
+    ports:
+      - '4000:4000'
+    depends_on:
+      - app

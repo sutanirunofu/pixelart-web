@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+*, *::before, *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+a, button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+html, body {
+    width: 100%;
+}
+
+body {
+    font-family: "Josefin Sans", sans-serif;
+    font-style: normal;
+    font-size: 14px;
+    font-optical-sizing: auto;
+    min-height: 100dvh;
+}

@@ -1,0 +1,21 @@
+<div class="user-page">
+    <div class="container">
+        <div class="info">
+            <div class="avatar">
+                <img src="user/default-avatar.png" alt="avatar">
+            </div>
+            <div class="firstname">
+                <h3>{{ (firstname$ | async) }}</h3>
+            </div>
+        </div>
+        <div class="buttons">
+            @if (authorized$ | async) {
+                <button>Импортировать рисунок</button>
+                <button>Настройки</button>
+                <button (click)="logout()" class="logout">Выйти</button>
+            } @else {
+                <button (click)="login()" class="login">Войти</button>
+            }
+        </div>
+    </div>
+</div>

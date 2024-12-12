@@ -1,0 +1,25 @@
+<div class="login-page">
+    <div class="background">
+        <img src="auth/campfire.gif" alt="campfire" />
+    </div>
+    <div class="container">
+        <div class="logo">
+            <h1>
+                <a routerLink="/arts">PixelArt</a>
+            </h1>
+        </div>
+        <form (submit)="login($event)">
+            <input type="text" name="username" placeholder="никнейм" required />
+            <input type="password" name="password" placeholder="пароль" required />
+            <button type="submit">Войти</button>
+        </form>
+        <div class="oauth">
+            <div class="telegram">
+                <img src="auth/telegram.svg" alt="telegram">
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>Нет аккаунта? <a routerLink="/signup">Зарегистрироваться</a></p>
+    </footer>
+</div>
