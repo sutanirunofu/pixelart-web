@@ -5,6 +5,7 @@ import { Store } from "@ngrx/store";
 import { ArtComponent } from "../shared/components/art/art.component";
 import { findAllArts } from "./art.actions";
 import { selectArts } from "./art.selectors";
+import { first } from "rxjs";
 
 @Component({
     selector: "pixelart-art-page",
@@ -19,6 +20,11 @@ export class ArtPageComponent implements OnInit {
     public arts$ = this.store.select(selectArts);
 
     public ngOnInit(): void {
-        this.store.dispatch(findAllArts());
+        this.arts$.pipe(first()).subscribe(arts => {
+            if (arts.length === 0) {
+                this.store.dispatch(findAllArts());
+            }
+        })
+        
     }
 }

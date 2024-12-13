@@ -15,7 +15,7 @@ export class HttpInterceptor implements HttpInterceptor {
             request.headers.append("Authorization", `Bearer ${accessToken}`);
         }
 
-        return next.handle(request).pipe(timeout(10_000), retry(3)).pipe(map(this.handleNewAccessToken));
+        return next.handle(request);
     }
 
     private handleNewAccessToken = <T>(response: HttpEvent<T>): HttpEvent<T> => {

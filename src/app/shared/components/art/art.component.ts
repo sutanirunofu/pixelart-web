@@ -25,7 +25,8 @@ export class ArtComponent implements OnInit {
             const renderArtRow: string[] = [];
 
             row.forEach((pixel) => {
-                renderArtRow.push(this.getColor(this.art.colors[pixel - 1]));
+                const color = pixel === 0 ? "transparent" : this.getColor(this.art.colors[pixel - 1]);
+                renderArtRow.push(color);
             });
 
             renderArtData.push(renderArtRow);
