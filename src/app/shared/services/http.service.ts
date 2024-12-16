@@ -43,9 +43,9 @@ export class HttpService {
     /* ---------- PRIVATE ---------- */
 
     private getAPIOrigin(): string {
-        if (typeof location === "undefined") return "http://localhost:8081";
-        return `${location.protocol}//${location.hostname}:${this.API_PORT}`;
-        // return "https://pixelart-api.onrender.com";
+        // if (typeof location === "undefined") return "http://localhost:8081";
+        // return `${location.protocol}//${location.hostname}:${this.API_PORT}`;
+        return "https://pixelart-api.onrender.com";
     }
 
     private getAuthorization(): string {
