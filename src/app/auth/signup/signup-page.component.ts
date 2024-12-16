@@ -6,6 +6,7 @@ import { first } from "rxjs";
 
 import * as authActions from "../auth.actions";
 import { selectAuthorized, selectAuthPending } from "../auth.selectors";
+import { SignupDTO } from "./signup.dto";
 
 @Component({
     selector: "pixelart-signup-page",
@@ -74,6 +75,12 @@ export class SignupPageComponent implements OnInit {
             }
         });
 
-        this.store.dispatch(authActions.signup({ firstname, username, password }));
+        const signupDTO: SignupDTO = {
+            firstname,
+            username: username.toLowerCase().trim(),
+            password: password.trim(),
+        };
+
+        this.store.dispatch(authActions.signup(signupDTO));
     }
 }

@@ -5,6 +5,7 @@ const simpleImportSort = require("eslint-plugin-simple-import-sort");
 
 module.exports = tseslint.config(
     {
+        ignores: ["src/app/app.component.ts"],
         files: ["**/*.ts"],
         extends: [
             eslint.configs.recommended,

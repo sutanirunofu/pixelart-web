@@ -14,29 +14,29 @@ export class HttpService {
     private readonly httpClient = inject(HttpClient);
     private readonly localStorageService = inject(LocalStorageService);
 
-    private readonly defaultHeaders = (headers?: any): HttpHeaders =>
+    private readonly defaultHeaders = (headers?: Record<string, unknown>): HttpHeaders =>
         new HttpHeaders({
             Authorization: this.getAuthorization(),
             ...headers,
         });
 
-    public get<T>(url: string, headers?: any): Observable<HttpResponse<T>> {
+    public get<T>(url: string, headers?: Record<string, unknown>): Observable<HttpResponse<T>> {
         return this.httpClient.get<T>(this.getAPIOrigin() + url, { observe: "response", headers: this.defaultHeaders(headers) });
     }
 
-    public post<T, K>(url: string, data: T, headers?: any): Observable<HttpResponse<K>> {
+    public post<T, K>(url: string, data: T, headers?: Record<string, unknown>): Observable<HttpResponse<K>> {
         return this.httpClient.post<K>(this.getAPIOrigin() + url, data, { observe: "response", headers: this.defaultHeaders(headers) });
     }
 
-    public put<T, K>(url: string, data: T, headers?: any): Observable<HttpResponse<K>> {
+    public put<T, K>(url: string, data: T, headers?: Record<string, unknown>): Observable<HttpResponse<K>> {
         return this.httpClient.put<K>(this.getAPIOrigin() + url, data, { observe: "response", headers: this.defaultHeaders(headers) });
     }
 
-    public patch<T, K>(url: string, data: T, headers?: any): Observable<HttpResponse<K>> {
+    public patch<T, K>(url: string, data: T, headers?: Record<string, unknown>): Observable<HttpResponse<K>> {
         return this.httpClient.patch<K>(this.getAPIOrigin() + url, data, { observe: "response", headers: this.defaultHeaders(headers) });
     }
 
-    public delete<T>(url: string, headers?: any): Observable<HttpResponse<T>> {
+    public delete<T>(url: string, headers?: Record<string, unknown>): Observable<HttpResponse<T>> {
         return this.httpClient.delete<T>(this.getAPIOrigin() + url, { observe: "response", headers: this.defaultHeaders(headers) });
     }
 

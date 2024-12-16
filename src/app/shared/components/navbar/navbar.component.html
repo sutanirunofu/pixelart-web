@@ -1,24 +1,22 @@
-@if (currentPage !== "login" && currentPage !== "signup") {
-    <div class="navbar">
-        <div class="top-line"></div>
-        <div class="container">
-            <div class="buttons">
-                <div class="buttons-item profile" [ngClass]="{ active: currentPage === 'user' }">
-                    <a routerLink="/user">
-                        <div class="icon"></div>
-                    </a>
-                </div>
-                <div class="buttons-item arts" [ngClass]="{ active: currentPage === 'arts' }">
-                    <a routerLink="/arts">
-                        <div class="icon"></div>
-                    </a>
-                </div>
-                <div class="buttons-item saved" [ngClass]="{ active: currentPage === 'saved-arts' }">
-                    <a routerLink="/saved-arts">
-                        <div class="icon"></div>
-                    </a>
-                </div>
+<div class="navbar" [ngClass]="{ isShow }">
+    <div class="top-line"></div>
+    <div class="container">
+        <div class="buttons">
+            <div class="buttons-item profile" [ngClass]="{ active: currentPage === '/user' }">
+                <a routerLink="/user">
+                    <div class="icon"></div>
+                </a>
+            </div>
+            <div class="buttons-item arts" [ngClass]="{ active: currentPage === '/arts' }">
+                <a routerLink="/arts">
+                    <div class="icon"></div>
+                </a>
+            </div>
+            <div class="buttons-item saved" [ngClass]="{ active: currentPage === '/saved-arts' }">
+                <a routerLink="/saved-arts">
+                    <div class="icon"></div>
+                </a>
             </div>
         </div>
     </div>
-}
+</div>

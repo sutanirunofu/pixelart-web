@@ -1,0 +1,19 @@
+<div class="art-item-bottom-bar">
+    <div class="top-line"></div>
+    <div class="colors">
+        @for (color of colors; track $index; let index = $index) {
+            <button (click)="setActiveColor(index)" class="color">
+                <div
+                    class="bg"
+                    [ngStyle]="{
+                        backgroundColor: color.value,
+                    }"
+                    [ngClass]="{
+                        active: activeColor === index || color.isComplete,
+                    }"
+                ></div>
+                <div class="number" [ngStyle]="{ color: getTextColor(color.value) }">{{ index + 1 }}</div>
+            </button>
+        }
+    </div>
+</div>

@@ -7,10 +7,10 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "serve:ssr": "node dist/pixel-art/server/server.mjs",
+        "serve:ssr:pixel-art": "node dist/pixel-art/server/server.mjs",
         "format": "prettier --write .",
-        "lint": "npx eslint '**/*.ts' '**/*.html'",
-        "lint:fix": "npx eslint '**/*.ts' '**/*.html' --fix"
+        "lint": "npx eslint 'src/**/*.ts' '**/*.html'",
+        "lint:fix": "npx eslint 'src/**/*.ts' '**/*.html' --fix"
     },
     "private": true,
     "dependencies": {

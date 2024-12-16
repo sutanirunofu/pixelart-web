@@ -1,4 +1,5 @@
 import { inject, Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { User } from "@root/user/user.model";
@@ -17,7 +18,9 @@ export class AuthEffects {
     private readonly actions$ = inject(Actions);
     private readonly authService = inject(AuthService);
     private readonly store = inject(Store);
+    private readonly router = inject(Router);
 
+    private readonly MAX_AUTHORIZE_ATTEMPTS = 3;
     private authorizeAttempts = 0;
 
     authorize$ = createEffect(() =>
@@ -26,7 +29,7 @@ export class AuthEffects {
             exhaustMap(() => {
                 this.authorizeAttempts++;
 
-                if (this.authorizeAttempts > 3) {
+                if (this.authorizeAttempts > this.MAX_AUTHORIZE_ATTEMPTS) {
                     return of(authActions.authorizeFailure());
                 }
 
@@ -72,8 +75,9 @@ export class AuthEffects {
                 this.authService.signup(signupDTO).pipe(
                     first(),
                     map((signupSuccessRTO: SignupSuccessRTO) => {
-                        console.log(signupSuccessRTO.message);
+                        console.log("message: ", signupSuccessRTO.message);
                         alert("Успешная регистрация"); // TODO: update to toast
+                        this.router.navigate(["/login"]);
                         return authActions.signupSuccess();
                     }),
                     catchError(() => of(authActions.signupFailure())),

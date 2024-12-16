@@ -6,6 +6,10 @@ export const routes: Routes = [
         loadComponent: () => import("./art/art-page.component").then((m) => m.ArtPageComponent),
     },
     {
+        path: "arts/:id",
+        loadComponent: () => import("./art/art-item/art-item-page.component").then((m) => m.ArtItemPageComponent),
+    },
+    {
         path: "user",
         loadComponent: () => import("./user/user-page.component").then((m) => m.UserPageComponent),
     },
