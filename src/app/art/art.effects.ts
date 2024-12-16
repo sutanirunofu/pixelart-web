@@ -1,9 +1,10 @@
 import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { ArtService } from "./art.service";
-import * as artActions from "./art.actions";
 import { catchError, exhaustMap, first, map, of } from "rxjs";
+
+import * as artActions from "./art.actions";
 import { Art } from "./art.model";
+import { ArtService } from "./art.service";
 
 @Injectable()
 export class ArtEffects {

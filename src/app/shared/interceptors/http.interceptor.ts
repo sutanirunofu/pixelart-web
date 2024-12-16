@@ -1,20 +1,24 @@
-import { HttpEvent, HttpHandler, HttpInterceptorFn, HttpRequest, HttpResponse } from "@angular/common/http";
+import { HttpEvent, HttpHandler, HttpRequest, HttpResponse } from "@angular/common/http";
 import { inject } from "@angular/core";
-import { map, Observable, retry, timeout } from "rxjs";
+import { map, Observable } from "rxjs";
+
 import { LocalStorageService } from "../services/local-storage.service";
-import { PixelartConstants } from "../utils/constants";
+import { PIXEL_CONSTANTS } from "../utils/constants";
 
 export class HttpInterceptor implements HttpInterceptor {
     private readonly localStorageService = inject(LocalStorageService);
 
-    public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const accessToken = this.localStorageService.get(PixelartConstants.LOCAL_STORAGE.ACCESS_TOKEN);
+    private readonly RETRY_COUNT = 3;
+    private readonly RETRY_DELAY = 2000;
+
+    public intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+        const accessToken = this.localStorageService.get(PIXEL_CONSTANTS.LOCAL_STORAGE.ACCESS_TOKEN);
 
         if (accessToken) {
             request.headers.append("Authorization", `Bearer ${accessToken}`);
         }
 
-        return next.handle(request).pipe(timeout(10_000), retry(3)).pipe(map(this.handleNewAccessToken));
+        return next.handle(request).pipe(map(this.handleNewAccessToken));
     }
 
     private handleNewAccessToken = <T>(response: HttpEvent<T>): HttpEvent<T> => {
@@ -22,15 +26,11 @@ export class HttpInterceptor implements HttpInterceptor {
             if (response.headers.has("Authorization")) {
                 const auth = response.headers.get("Authorization");
 
-                console.log(auth);
-
                 if (auth) {
                     const accessToken = auth.split(" ")[1];
-                    this.localStorageService.set(PixelartConstants.LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
+                    this.localStorageService.set(PIXEL_CONSTANTS.LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
                 }
             }
-
-            console.log(response);
         }
 
         return response;

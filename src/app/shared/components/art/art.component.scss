@@ -3,11 +3,11 @@
 .art {
     display: grid;
     width: 100%;
-    height: auto;
-    aspect-ratio: 1/1;
-    border: 1px solid $color-black;
+    height: fit-content;
+    border: 1px solid $color-gray;
     border-radius: $border-radius-m;
     overflow: hidden;
+    filter: grayscale(100%) contrast(60%) brightness(220%);
 
     .row {
         display: flex;
@@ -16,7 +16,8 @@
 
         .pixel {
             width: 100%;
-            height: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
         }
     }
 }

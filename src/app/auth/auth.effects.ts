@@ -1,22 +1,26 @@
 import { inject, Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { AuthService } from "./auth.service";
-import * as authActions from "./auth.actions";
+import { Store } from "@ngrx/store";
+import { User } from "@root/user/user.model";
 import { catchError, exhaustMap, first, map, of } from "rxjs";
+
+import * as userActions from "../user/user.actions";
+import * as authActions from "./auth.actions";
+import { AuthService } from "./auth.service";
 import { LoginDTO } from "./login/login.dto";
 import { LoginSuccessRTO } from "./login/login-success.rto";
-import { Store } from "@ngrx/store";
-import * as userActions from "../user/user.actions";
 import { SignupDTO } from "./signup/signup.dto";
 import { SignupSuccessRTO } from "./signup/signup-success.rto";
-import { User } from "@root/user/user.model";
 
 @Injectable()
 export class AuthEffects {
     private readonly actions$ = inject(Actions);
     private readonly authService = inject(AuthService);
     private readonly store = inject(Store);
+    private readonly router = inject(Router);
 
+    private readonly MAX_AUTHORIZE_ATTEMPTS = 3;
     private authorizeAttempts = 0;
 
     authorize$ = createEffect(() =>
@@ -25,7 +29,7 @@ export class AuthEffects {
             exhaustMap(() => {
                 this.authorizeAttempts++;
 
-                if (this.authorizeAttempts > 3) {
+                if (this.authorizeAttempts > this.MAX_AUTHORIZE_ATTEMPTS) {
                     return of(authActions.authorizeFailure());
                 }
 
@@ -71,8 +75,9 @@ export class AuthEffects {
                 this.authService.signup(signupDTO).pipe(
                     first(),
                     map((signupSuccessRTO: SignupSuccessRTO) => {
-                        console.log(signupSuccessRTO.message);
+                        console.log("message: ", signupSuccessRTO.message);
                         alert("Успешная регистрация"); // TODO: update to toast
+                        this.router.navigate(["/login"]);
                         return authActions.signupSuccess();
                     }),
                     catchError(() => of(authActions.signupFailure())),

@@ -1,3 +1,3 @@
 export interface SignupSuccessRTO {
-  message: string;
+    message: string;
 }
