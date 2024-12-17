@@ -17,6 +17,9 @@ export class HttpService {
     private readonly defaultHeaders = (headers?: Record<string, unknown>): HttpHeaders =>
         new HttpHeaders({
             Authorization: this.getAuthorization(),
+            "Content-Type": "application/json",
+            Accept: "*/*",
+            Connection: "keep-alive",
             ...headers,
         });
 
