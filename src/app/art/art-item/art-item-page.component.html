@@ -1,7 +1,12 @@
 <div class="art-item">
     <div class="container">
         <pixelart-art-item-top-bar />
-        <div class="art">
+        <div
+            class="art"
+            [ngClass]="{
+                isComplete,
+            }"
+        >
             @for (row of pixelMap; track $index; let rowIndex = $index) {
                 <div class="row">
                     @for (pixel of row; track $index; let columnIndex = $index) {
@@ -9,6 +14,7 @@
                             (click)="paint(rowIndex, columnIndex)"
                             [ngClass]="{
                                 active: activeColor + 1 === pixel.num,
+                                painted: pixel.painted?.isCorrect,
                             }"
                         >
                             <div
@@ -24,7 +30,14 @@
                                 }"
                                 [ngClass]="{ incorrect: pixel.painted ? !pixel.painted.isCorrect : true }"
                             ></div>
-                            <div class="num" [ngStyle]="{ color: pixel.painted ? pixel.textColor : undefined }">{{ pixel.num }}</div>
+                            <div
+                                class="num"
+                                [ngStyle]="{
+                                    color: activeColor + 1 === pixel.num ? '#101010' : pixel.painted ? pixel.textColor : undefined,
+                                }"
+                            >
+                                {{ pixel.num }}
+                            </div>
                         </button>
                     }
                 </div>

@@ -17,6 +17,9 @@ export class HttpService {
     private readonly defaultHeaders = (headers?: Record<string, unknown>): HttpHeaders =>
         new HttpHeaders({
             Authorization: this.getAuthorization(),
+            "Content-Type": "application/json",
+            Accept: "*/*",
+            Connection: "keep-alive",
             ...headers,
         });
 
@@ -43,9 +46,13 @@ export class HttpService {
     /* ---------- PRIVATE ---------- */
 
     private getAPIOrigin(): string {
-        // if (typeof location === "undefined") return "http://localhost:8081";
-        // return `${location.protocol}//${location.hostname}:${this.API_PORT}`;
-        return "https://pixelart-api.onrender.com";
+        if (typeof location === "undefined") return "http://localhost:8081";
+
+        if (location.protocol.includes("https")) {
+            return "https://pixelart-api.onrender.com";
+        }
+
+        return `${location.protocol}//${location.hostname}:${this.API_PORT}`;
     }
 
     private getAuthorization(): string {

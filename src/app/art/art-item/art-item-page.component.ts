@@ -23,6 +23,8 @@ export class ArtItemPageComponent implements OnInit {
     public activeColor = 0;
     public isComplete = false;
 
+    private currentArtId?: string;
+    private paintedPixelsCount = 0;
     private colorCache: Record<number, string> = {};
     private readonly route = inject(ActivatedRoute);
     private readonly savedArtService = inject(SavedArtService);
@@ -30,9 +32,9 @@ export class ArtItemPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.paramMap.subscribe((params) => {
-            const id = params.get("id")?.toString();
-            if (!id) return;
-            this.loadSavedArt(id);
+            this.currentArtId = params.get("id")?.toString();
+            if (!this.currentArtId) return;
+            this.loadSavedArt(this.currentArtId);
         });
     }
 
@@ -40,12 +42,16 @@ export class ArtItemPageComponent implements OnInit {
         if (this.isComplete) return;
 
         const pixel = this.pixelMap[row][column];
+        this.paintedPixelsCount++;
 
-        if (pixel.painted !== undefined) {
-            if (this.activeColor + 1 === pixel.painted.num) {
-                pixel.painted = undefined;
-                return;
-            }
+        if (this.paintedPixelsCount >= 10) {
+            this.save();
+            this.paintedPixelsCount = 0;
+        }
+
+        if (pixel.painted !== undefined && pixel.painted.isCorrect) {
+            pixel.painted = undefined;
+            return;
         }
 
         pixel.painted = {
@@ -54,7 +60,23 @@ export class ArtItemPageComponent implements OnInit {
             isCorrect: pixel.num === this.activeColor + 1,
         };
 
-        this.checkColorComplete(this.activeColor);
+        for (let i = 0; i < this.colors.length; i++) {
+            this.checkColorComplete(i);
+        }
+
+        const isComplete = this.checkColorComplete(this.activeColor);
+
+        if (isComplete) {
+            for (let i = 0; i < this.colors.length; i++) {
+                const isColorComplete = this.checkColorComplete(i);
+
+                if (!isColorComplete) {
+                    this.activeColor = i;
+                    break;
+                }
+            }
+        }
+
         this.checkArtComplete();
     }
 
@@ -68,11 +90,31 @@ export class ArtItemPageComponent implements OnInit {
             .pipe(
                 catchError(() => {
                     this.loadArt(artId);
+
+                    if (!this.currentArtId) {
+                        console.error("Art id not found!");
+                        return EMPTY;
+                    }
+
+                    this.savedArtService.saveByArtId(this.currentArtId, { map: [], isComplete: false });
+
                     return EMPTY;
                 }),
             )
             .subscribe((savedArt) => {
-                this.loadPixelMap(savedArt.map, savedArt.art.colors);
+                this.loadPixelMap(savedArt.art.map ?? [], savedArt.art.colors);
+
+                savedArt.map.forEach((row, y) => {
+                    row.forEach((col, x) => {
+                        // console.log(this.pixelMap[y][x].num, col);
+
+                        this.pixelMap[y][x].painted = {
+                            num: col + 1,
+                            color: this.getColor(savedArt.art.colors[col - 1]),
+                            isCorrect: this.pixelMap[y][x].num === col,
+                        };
+                    });
+                });
             });
     }
 
@@ -83,6 +125,7 @@ export class ArtItemPageComponent implements OnInit {
     }
 
     private loadPixelMap(map: number[][], colors: number[]) {
+        console.log(map, colors);
         this.colors = colors.map((n) => ({ value: this.getColor(n), isComplete: false }));
         const pixelMap: Pixel[][] = [];
 
@@ -112,6 +155,10 @@ export class ArtItemPageComponent implements OnInit {
     }
 
     private getColor(num: number): string {
+        if (num === undefined) {
+            return "transparent";
+        }
+
         if (this.colorCache[num]) {
             return this.colorCache[num];
         }
@@ -122,24 +169,39 @@ export class ArtItemPageComponent implements OnInit {
         return color;
     }
 
-    private checkColorComplete(colorNumber: number): void {
+    private checkColorComplete(colorNumber: number): boolean {
         const oneColorMap = this.pixelMap.map((row) => row.filter((pixel) => pixel.num === colorNumber + 1));
         const isComplete = oneColorMap.every((row) => row.every((pixel) => pixel.painted?.isCorrect));
 
-        if (!isComplete || this.activeColor >= this.colors.length - 1) return;
+        if (!isComplete) {
+            this.colors[colorNumber].isComplete = false;
+            return false;
+        }
 
         this.colors[colorNumber].isComplete = true;
-        this.activeColor++;
+
+        return true;
     }
 
     private checkArtComplete(): void {
         const isComplete = this.pixelMap.every((row) => row.every((pixel) => pixel.painted?.isCorrect));
         if (isComplete) {
+            this.save();
             this.isComplete = true;
 
             setTimeout(() => {
                 alert("Рисунок полностью разукрашен!");
             }, 200);
         }
+    }
+
+    private save() {
+        if (!this.currentArtId) {
+            console.error("Art id not found!");
+            return;
+        }
+
+        const map: number[][] = this.pixelMap.map((row) => row.map((p) => (p.painted?.isCorrect ? p.num : 0)));
+        this.savedArtService.updateByArtId(this.currentArtId, { map, isComplete: this.isComplete }).subscribe();
     }
 }
