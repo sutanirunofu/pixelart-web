@@ -5,6 +5,7 @@
     flex-direction: column;
     width: 100%;
     height: 60px;
+    background-color: #ffffff;
 
     .back {
         position: absolute;
@@ -13,13 +14,16 @@
         width: auto;
         height: 100%;
 
-        a {
+        button {
             display: flex;
             justify-content: center;
             align-items: center;
             width: auto;
             height: 100%;
             aspect-ratio: 1/1;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
 
             img {
                 width: 30px;

@@ -1,6 +1,6 @@
 import { NgClass, NgStyle } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, RouterModule } from "@angular/router";
+import { Component, HostListener, inject, OnInit } from "@angular/core";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { SavedArtService } from "@root/saved-art/saved-art.service";
 import { catchError, EMPTY } from "rxjs";
 
@@ -10,6 +10,8 @@ import { ArtItemTopBarComponent } from "./art-item-top-bar/art-item-top-bar.comp
 import { Color } from "./color.mode";
 import { Pixel } from "./pixel.model";
 
+// TODO: make art zoom
+
 @Component({
     selector: "pixelart-art-item-page",
     standalone: true,
@@ -17,16 +19,24 @@ import { Pixel } from "./pixel.model";
     templateUrl: "./art-item-page.component.html",
     styleUrl: "./art-item-page.component.scss",
 })
-export class ArtItemPageComponent implements OnInit, OnDestroy {
+export class ArtItemPageComponent implements OnInit {
     public pixelMap: Pixel[][] = [];
     public colors: Color[] = [];
     public activeColor = 0;
     public isComplete = false;
+    public hasChanges = false;
+
+    public zoom = 0.5;
+
+    private MAX_ZOOM = 5;
+    private MIN_ZOOM = 0.5;
 
     private currentArtId?: string;
     private paintedPixelsCount = 0;
     private colorCache: Record<number, string> = {};
+
     private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
     private readonly savedArtService = inject(SavedArtService);
     private readonly artService = inject(ArtService);
 
@@ -38,12 +48,25 @@ export class ArtItemPageComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(): void {
+    @HostListener("window:beforeunload")
+    beforeUnload() {
         this.save();
+    }
+
+    @HostListener("wheel", ["$event"])
+    onWheel(event: WheelEvent) {
+        event.preventDefault();
+        if (event.deltaY < 0 && this.zoom < this.MAX_ZOOM) {
+            this.zoom += 0.1; // Увеличение
+        } else if (this.zoom > this.MIN_ZOOM) {
+            this.zoom -= 0.1; // Уменьшение
+        }
     }
 
     public paint(row: number, column: number): void {
         if (this.isComplete) return;
+
+        this.hasChanges = true;
 
         const pixel = this.pixelMap[row][column];
         this.paintedPixelsCount++;
@@ -82,6 +105,11 @@ export class ArtItemPageComponent implements OnInit, OnDestroy {
 
     public setActiveColor(value: number): void {
         this.activeColor = value;
+    }
+
+    public back(): void {
+        this.save();
+        this.router.navigate(["/arts"]);
     }
 
     private loadSavedArt(artId: string) {
