@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { RouterModule } from "@angular/router";
 
 @Component({
@@ -8,4 +8,6 @@ import { RouterModule } from "@angular/router";
     templateUrl: "./art-item-top-bar.component.html",
     styleUrl: "./art-item-top-bar.component.scss",
 })
-export class ArtItemTopBarComponent {}
+export class ArtItemTopBarComponent {
+    @Output() back = new EventEmitter();
+}
