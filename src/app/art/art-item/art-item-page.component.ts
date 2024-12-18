@@ -60,10 +60,6 @@ export class ArtItemPageComponent implements OnInit {
             isCorrect: pixel.num === this.activeColor + 1,
         };
 
-        for (let i = 0; i < this.colors.length; i++) {
-            this.checkColorComplete(i);
-        }
-
         const isComplete = this.checkColorComplete(this.activeColor);
 
         if (isComplete) {
@@ -125,7 +121,6 @@ export class ArtItemPageComponent implements OnInit {
     }
 
     private loadPixelMap(map: number[][], colors: number[]) {
-        console.log(map, colors);
         this.colors = colors.map((n) => ({ value: this.getColor(n), isComplete: false }));
         const pixelMap: Pixel[][] = [];
 
@@ -152,6 +147,8 @@ export class ArtItemPageComponent implements OnInit {
         });
 
         this.pixelMap = pixelMap;
+
+        this.checkArtComplete();
     }
 
     private getColor(num: number): string {
@@ -184,15 +181,20 @@ export class ArtItemPageComponent implements OnInit {
     }
 
     private checkArtComplete(): void {
-        const isComplete = this.pixelMap.every((row) => row.every((pixel) => pixel.painted?.isCorrect));
-        if (isComplete) {
-            this.save();
-            this.isComplete = true;
+        setTimeout(() => {
+            const isComplete = this.pixelMap.every((row) => {
+                return row.every((pixel) => pixel.painted?.isCorrect);
+            });
 
-            setTimeout(() => {
-                alert("Рисунок полностью разукрашен!");
-            }, 200);
-        }
+            if (isComplete) {
+                this.save();
+                this.isComplete = true;
+            }
+
+            for (let i = 0; i < this.colors.length; i++) {
+                this.checkColorComplete(i);
+            }
+        });
     }
 
     private save() {
