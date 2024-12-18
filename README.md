@@ -1,4 +1,4 @@
 # PixelArt
-_Создавай. Рисуй. Вдохновляй!_
+_Create. Draw. Inspire!_
 
-PixelArt — это увлекательная онлайн-платформа, вдохновленная классической игрой Sandbox, где пользователи могут раскрашивать изображения по пикселям. Наша цель — предоставить вам современный и интуитивно понятный интерфейс, который делает процесс творчества еще более увлекательным.
+PixelArt is an exciting online platform inspired by the classic game Sandbox, where users can colour images pixel by pixel. Our goal is to provide you with a modern and intuitive interface that makes the creative process even more fun.
