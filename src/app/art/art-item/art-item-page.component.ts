@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { SavedArtService } from "@root/saved-art/saved-art.service";
 import { catchError, EMPTY } from "rxjs";
@@ -17,7 +17,7 @@ import { Pixel } from "./pixel.model";
     templateUrl: "./art-item-page.component.html",
     styleUrl: "./art-item-page.component.scss",
 })
-export class ArtItemPageComponent implements OnInit {
+export class ArtItemPageComponent implements OnInit, OnDestroy {
     public pixelMap: Pixel[][] = [];
     public colors: Color[] = [];
     public activeColor = 0;
@@ -36,6 +36,10 @@ export class ArtItemPageComponent implements OnInit {
             if (!this.currentArtId) return;
             this.loadSavedArt(this.currentArtId);
         });
+    }
+
+    ngOnDestroy(): void {
+        this.save();
     }
 
     public paint(row: number, column: number): void {
