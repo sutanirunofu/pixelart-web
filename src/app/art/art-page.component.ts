@@ -1,12 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Store } from "@ngrx/store";
-import { first } from "rxjs";
+import { SavedArt } from "@root/saved-art/saved-art.model";
+import { SavedArtService } from "@root/saved-art/saved-art.service";
+import { ArtSavedArt } from "@root/shared/components/art/art-saved-art.interface";
 
 import { ArtComponent } from "../shared/components/art/art.component";
-import { findAllArts } from "./art.actions";
-import { selectArts } from "./art.selectors";
+import { Art } from "./art.model";
+import { ArtService } from "./art.service";
 
 @Component({
     selector: "pixelart-art-page",
@@ -16,15 +17,29 @@ import { selectArts } from "./art.selectors";
     styleUrl: "./art-page.component.scss",
 })
 export class ArtPageComponent implements OnInit {
-    private readonly store = inject(Store);
+    private readonly artService = inject(ArtService);
+    private readonly savedArtService = inject(SavedArtService);
 
-    public arts$ = this.store.select(selectArts);
+    public arts: ArtSavedArt[] = [];
 
     public ngOnInit(): void {
-        this.arts$.pipe(first()).subscribe((arts) => {
-            if (arts.length === 0) {
-                this.store.dispatch(findAllArts());
-            }
+        this.artService.findAll().subscribe((arts) => {
+            this.savedArtService.findAll().subscribe((savedArts) => {
+                const newArts: ArtSavedArt[] = arts.reduce((acc: ArtSavedArt[], cur: Art) => {
+                    const savedArt: SavedArt | undefined = savedArts.find((s) => s.art.id === cur.id);
+
+                    if (!savedArt) {
+                        const saved: Art = JSON.parse(JSON.stringify(cur));
+                        saved.map = [];
+                        return [...acc, { savedArt: saved, art: cur }];
+                    }
+
+                    savedArt.art.map = savedArt.map;
+                    return [...acc, { savedArt: savedArt.art, art: cur }];
+                }, []);
+
+                this.arts = newArts;
+            });
         });
     }
 }
