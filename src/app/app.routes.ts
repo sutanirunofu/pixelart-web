@@ -16,6 +16,7 @@ export const routes: Routes = [
     {
         path: "user",
         loadComponent: () => import("./user/user-page.component").then((m) => m.UserPageComponent),
+        canActivate: [authGuard],
     },
     {
         path: "saved-arts",
