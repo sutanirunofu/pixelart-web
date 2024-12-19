@@ -1,9 +1,14 @@
 <div class="art-page">
     <div class="container">
         <div class="arts">
-            @for (art of arts$ | async; track $index) {
-                <a [routerLink]="'/arts/' + art.id">
-                    <pixelart-art [art]="art" />
+            @for (art of arts; track $index) {
+                <a [routerLink]="'/arts/' + art.art.id" class="art-container">
+                    <div class="art">
+                        <pixelart-art [art]="art.art" />
+                    </div>
+                    <div class="saved-art">
+                        <pixelart-art [art]="art.savedArt" />
+                    </div>
                 </a>
             }
         </div>

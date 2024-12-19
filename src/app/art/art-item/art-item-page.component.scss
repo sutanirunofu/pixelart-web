@@ -14,6 +14,7 @@
         height: 100%;
         max-width: $container-width;
         margin: 0 auto;
+        overflow: hidden;
 
         pixelart-art-item-top-bar {
             position: absolute;
@@ -52,150 +53,145 @@
         }
 
         .art-container {
-            width: 100%;
-            height: 100%;
-            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: fit-content;
+            height: fit-content;
 
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            .art-container-inner {
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            .art {
+                display: grid;
+                position: absolute;
                 width: fit-content;
                 height: fit-content;
-                margin: 200px 50px;
-                
-                .art {
-                    display: grid;
-                    width: fit-content;
+                user-select: none;
+                border: 1px solid transparent;
+                border-radius: $border-radius-m;
+
+                &.isComplete {
+                    left: auto !important;
+                    top: auto !important;
+                    right: auto !important;
+                    bottom: auto !important;
+                    border-color: $color-gray;
+
+                    .row > button {
+                        border: none !important;
+                    }
+                }
+
+                .row {
+                    display: flex;
+                    width: 100%;
                     height: fit-content;
-                    user-select: none;
-                    border: 1px solid transparent;
-                    border-radius: $border-radius-m;
-        
-                    &.isComplete {
-                        border-color: $color-black;
-        
-                        .row > button {
-                            border: none !important;
+
+                    button {
+                        position: relative;
+                        width: 0px;
+                        height: 0px;
+                        background-color: transparent;
+                        border-left: 1px solid $color-gray;
+                        border-top: 1px solid $color-gray;
+                        border-right: none;
+                        border-bottom: none;
+                        overflow: hidden;
+                        cursor: pointer;
+
+                        &:last-child {
+                            border-right: 1px solid $color-gray;
+                        }
+
+                        &.active > .bg::after {
+                            content: "";
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            box-shadow: inset 0 0 2px transparent;
+                            transition: box-shadow $anim-time $anim-mode;
+                        }
+
+                        &.active > .bg {
+                            position: relative;
+                            background-color: #ffffff !important;
+
+                            &::after {
+                                box-shadow: inset 0 0 2px 1px $color-blue;
+                            }
+                        }
+
+                        &.active > .num {
+                            color: $color-black;
+                        }
+
+                        &.painted > .num {
+                            color: transparent !important;
+                        }
+
+                        .bg,
+                        .paintedBg {
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            transition: all $anim-time $anim-mode;
+                        }
+
+                        &:not(.active) > .bg {
+                            filter: grayscale(100%);
+                        }
+
+                        .paintedBg.incorrect {
+                            opacity: 0.3;
+                        }
+
+                        .num {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            font-size: 14px;
+                            color: #ffffff;
                         }
                     }
-        
-                    .row {
-                        display: flex;
-                        width: 100%;
-                        height: fit-content;
-        
-                        button {
-                            position: relative;
-                            width: 40px;
-                            height: 40px;
-                            background-color: transparent;
-                            border-left: 1px solid $color-black;
-                            border-top: 1px solid $color-black;
-                            border-right: none;
-                            border-bottom: none;
-                            overflow: hidden;
-                            cursor: pointer;
-        
-                            &:last-child {
-                                border-right: 1px solid $color-black;
-                            }
-        
-                            &.active > .bg::after {
-                                content: "";
-                                position: absolute;
-                                left: 0;
-                                top: 0;
-                                width: 100%;
-                                height: 100%;
-                                border: 1px solid transparent;
-                                transition: border-color $anim-time $anim-mode;
-                            }
-        
-                            &.active > .bg {
-                                position: relative;
-                                background-color: #ffffff !important;
-        
-                                &::after {
-                                    border-color: $color-blue;
-                                }
-                            }
-        
-                            &.active > .num {
-                                color: $color-black;
-                            }
-        
-                            &.painted > .num {
-                                color: transparent !important;
-                            }
-        
-                            .bg,
-                            .paintedBg {
-                                position: absolute;
-                                left: 0;
-                                top: 0;
-                                width: 100%;
-                                height: 100%;
-                                transition: all $anim-time $anim-mode;
-                            }
-        
-                            &:not(.active) > .bg {
-                                filter: grayscale(100%) contrast(100%) brightness(60%);
-                            }
-        
-                            .paintedBg.incorrect {
-                                opacity: 0.3;
-                            }
-        
-                            .num {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                position: absolute;
-                                left: 0;
-                                top: 0;
-                                width: 100%;
-                                height: 100%;
-                                font-size: 24px;
-                                color: #ffffff;
-                            }
-                        }
-        
-                        &:last-child > button {
-                            border-bottom: 1px solid $color-black;
-                        }
-        
-                        &:first-child > button:first-child {
-                            border-top-left-radius: $border-radius-m;
-                        }
-                        &:first-child > button:first-child > .bg::after {
-                            border-top-left-radius: $border-radius-m;
-                        }
-        
-                        &:first-child > button:last-child {
-                            border-top-right-radius: $border-radius-m;
-                        }
-                        &:first-child > button:last-child > .bg::after {
-                            border-top-right-radius: $border-radius-m;
-                        }
-        
-                        &:last-child > button:first-child {
-                            border-bottom-left-radius: $border-radius-m;
-                        }
-                        &:last-child > button:first-child > .bg::after {
-                            border-bottom-left-radius: $border-radius-m;
-                        }
-        
-                        &:last-child > button:last-child {
-                            border-bottom-right-radius: $border-radius-m;
-                        }
-                        &:last-child > button:last-child > .bg::after {
-                            border-bottom-right-radius: $border-radius-m;
-                        }
+
+                    &:last-child > button {
+                        border-bottom: 1px solid $color-gray;
+                    }
+
+                    &:first-child > button:first-child {
+                        border-top-left-radius: $border-radius-m;
+                    }
+                    &:first-child > button:first-child > .bg::after {
+                        border-top-left-radius: $border-radius-m;
+                    }
+
+                    &:first-child > button:last-child {
+                        border-top-right-radius: $border-radius-m;
+                    }
+                    &:first-child > button:last-child > .bg::after {
+                        border-top-right-radius: $border-radius-m;
+                    }
+
+                    &:last-child > button:first-child {
+                        border-bottom-left-radius: $border-radius-m;
+                    }
+                    &:last-child > button:first-child > .bg::after {
+                        border-bottom-left-radius: $border-radius-m;
+                    }
+
+                    &:last-child > button:last-child {
+                        border-bottom-right-radius: $border-radius-m;
+                    }
+                    &:last-child > button:last-child > .bg::after {
+                        border-bottom-right-radius: $border-radius-m;
                     }
                 }
             }

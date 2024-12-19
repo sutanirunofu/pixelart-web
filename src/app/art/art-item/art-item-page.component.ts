@@ -2,6 +2,7 @@ import { NgClass, NgStyle } from "@angular/common";
 import { Component, HostListener, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { SavedArtService } from "@root/saved-art/saved-art.service";
+import { ElementMovementDirective } from "@root/shared/directives/element-movement.directive";
 import { catchError, EMPTY } from "rxjs";
 
 import { ArtService } from "../art.service";
@@ -10,12 +11,10 @@ import { ArtItemTopBarComponent } from "./art-item-top-bar/art-item-top-bar.comp
 import { Color } from "./color.mode";
 import { Pixel } from "./pixel.model";
 
-// TODO: make art zoom
-
 @Component({
     selector: "pixelart-art-item-page",
     standalone: true,
-    imports: [NgStyle, NgClass, RouterModule, ArtItemTopBarComponent, ArtItemBottomBarComponent],
+    imports: [NgStyle, NgClass, RouterModule, ArtItemTopBarComponent, ArtItemBottomBarComponent, ElementMovementDirective],
     templateUrl: "./art-item-page.component.html",
     styleUrl: "./art-item-page.component.scss",
 })
@@ -26,11 +25,18 @@ export class ArtItemPageComponent implements OnInit {
     public isComplete = false;
     public hasChanges = false;
 
-    public zoom = 0.5;
+    public zoom = 1;
+    public lastScale = 1;
 
-    private MAX_ZOOM = 5;
-    private MIN_ZOOM = 0.5;
+    public readonly PIXEL_SIZE = 30;
 
+    private ZOOM_STEP = 0.1;
+    private ZOOM_MAX = 3;
+    private ZOOM_MIN = 0.5;
+
+    private initialDistance: number | null = null;
+
+    private isSaved = false;
     private currentArtId?: string;
     private paintedPixelsCount = 0;
     private colorCache: Record<number, string> = {};
@@ -40,7 +46,7 @@ export class ArtItemPageComponent implements OnInit {
     private readonly savedArtService = inject(SavedArtService);
     private readonly artService = inject(ArtService);
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.route.paramMap.subscribe((params) => {
             this.currentArtId = params.get("id")?.toString();
             if (!this.currentArtId) return;
@@ -49,26 +55,53 @@ export class ArtItemPageComponent implements OnInit {
     }
 
     @HostListener("window:beforeunload")
-    beforeUnload() {
+    public beforeUnload() {
         this.save();
     }
 
-    @HostListener("wheel", ["$event"])
-    onWheel(event: WheelEvent) {
+    public onWheel(event: WheelEvent) {
         event.preventDefault();
-        if (event.deltaY < 0 && this.zoom < this.MAX_ZOOM) {
-            this.zoom += 0.1; // Увеличение
-        } else if (this.zoom > this.MIN_ZOOM) {
-            this.zoom -= 0.1; // Уменьшение
+
+        if (event.deltaY < 0 && this.zoom <= this.ZOOM_MAX) {
+            this.zoom += this.ZOOM_STEP;
+        } else if (this.zoom >= this.ZOOM_MIN) {
+            this.zoom -= this.ZOOM_STEP;
         }
     }
 
-    public paint(row: number, column: number): void {
+    onTouchStart(event: TouchEvent) {
+        if (event.touches.length !== 2) return;
+        this.initialDistance = this.getDistance(event.touches[0], event.touches[1]);
+    }
+
+    onTouchMove(event: TouchEvent) {
+        if (event.touches.length !== 2 || this.initialDistance === null) return;
+
+        const currentDistance = this.getDistance(event.touches[0], event.touches[1]);
+        const nextZoom = this.lastScale * (currentDistance / this.initialDistance);
+
+        if (nextZoom <= this.ZOOM_MAX && nextZoom >= this.ZOOM_MIN) {
+            this.zoom = nextZoom;
+        }
+    }
+
+    onTouchEnd() {
+        this.lastScale = this.zoom;
+        this.initialDistance = null;
+    }
+
+    public paint(event: Event, row: number, column: number): void {
+        event.stopPropagation();
+
+        if (!this.isSaved && this.currentArtId) {
+            this.savedArtService.saveByArtId(this.currentArtId, { map: [], isComplete: false });
+        }
+
         if (this.isComplete) return;
 
         this.hasChanges = true;
 
-        const pixel = this.pixelMap[row][column];
+        const pixel: Pixel = this.pixelMap[row][column];
         this.paintedPixelsCount++;
 
         if (this.paintedPixelsCount >= 10) {
@@ -76,10 +109,10 @@ export class ArtItemPageComponent implements OnInit {
             this.paintedPixelsCount = 0;
         }
 
-        if (pixel.painted !== undefined && pixel.painted.isCorrect) {
-            pixel.painted = undefined;
-            return;
-        }
+        // if (pixel.painted !== undefined && pixel.color !== "transparent") {
+        //     pixel.painted = undefined;
+        //     return;
+        // }
 
         pixel.painted = {
             num: this.activeColor,
@@ -121,15 +154,14 @@ export class ArtItemPageComponent implements OnInit {
 
                     if (!this.currentArtId) {
                         console.error("Art id not found!");
-                        return EMPTY;
                     }
-
-                    this.savedArtService.saveByArtId(this.currentArtId, { map: [], isComplete: false });
 
                     return EMPTY;
                 }),
             )
             .subscribe((savedArt) => {
+                this.isSaved = true;
+
                 this.loadPixelMap(savedArt.art.map ?? [], savedArt.art.colors);
 
                 savedArt.map.forEach((row, y) => {
@@ -180,6 +212,7 @@ export class ArtItemPageComponent implements OnInit {
 
         this.pixelMap = pixelMap;
 
+        this.initZoom();
         this.checkArtComplete();
     }
 
@@ -221,12 +254,27 @@ export class ArtItemPageComponent implements OnInit {
             if (isComplete) {
                 this.save();
                 this.isComplete = true;
+
+                this.zoom = this.ZOOM_MIN;
             }
 
             for (let i = 0; i < this.colors.length; i++) {
                 this.checkColorComplete(i);
             }
         });
+    }
+
+    private initZoom() {
+        if (this.pixelMap.length < 1) return;
+        const width = this.pixelMap[0].length;
+        this.ZOOM_MIN = 12 / width;
+        this.zoom = this.ZOOM_MIN;
+    }
+
+    private getDistance(touch1: Touch, touch2: Touch): number {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     private save() {

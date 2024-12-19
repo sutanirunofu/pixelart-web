@@ -1,54 +1,64 @@
 <div class="art-item">
-    <div class="container">
+    <div
+        class="container"
+        (wheel)="onWheel($event)"
+        (touchstart)="onTouchStart($event)"
+        (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd()"
+    >
         <pixelart-art-item-top-bar (back)="back()" />
         <div class="art-container">
-            <div class="art-container-inner">
-                <div
-                    class="art"
-                    [ngClass]="{
-                        isComplete,
-                    }"
-                    
-                    [ngStyle]="{
-                        transform: 'scale(' + zoom + ')'
-                    }"
-                >
-                    @for (row of pixelMap; track $index; let rowIndex = $index) {
-                        <div class="row">
-                            @for (pixel of row; track $index; let columnIndex = $index) {
-                                <button
-                                    (click)="paint(rowIndex, columnIndex)"
-                                    [ngClass]="{
-                                        active: activeColor + 1 === pixel.num,
-                                        painted: pixel.painted?.isCorrect,
+            <div
+                class="art"
+                pixelartElementMovement
+                [ngClass]="{
+                    isComplete,
+                }"
+                [ngStyle]="{
+                    transform: 'scale(' + zoom + ')',
+                }"
+            >
+                @for (row of pixelMap; track $index; let rowIndex = $index) {
+                    <div class="row">
+                        @for (pixel of row; track $index; let columnIndex = $index) {
+                            <button
+                                (click)="paint($event, rowIndex, columnIndex)"
+                                rowIndex
+                                columnIndex
+                                [ngClass]="{
+                                    active: activeColor + 1 === pixel.num,
+                                    painted: pixel.painted?.isCorrect,
+                                }"
+                                [ngStyle]="{
+                                    width: PIXEL_SIZE + 'px',
+                                    height: PIXEL_SIZE + 'px',
+                                }"
+                            >
+                                <div
+                                    class="bg"
+                                    [ngStyle]="{
+                                        backgroundColor: pixel.color,
+                                    }"
+                                ></div>
+                                <div
+                                    class="paintedBg"
+                                    [ngStyle]="{
+                                        backgroundColor: pixel.painted?.color ?? 'transparent',
+                                    }"
+                                    [ngClass]="{ incorrect: pixel.painted ? !pixel.painted.isCorrect : true }"
+                                ></div>
+                                <div
+                                    class="num"
+                                    [ngStyle]="{
+                                        color: activeColor + 1 === pixel.num ? '#101010' : pixel.painted ? pixel.textColor : undefined,
                                     }"
                                 >
-                                    <div
-                                        class="bg"
-                                        [ngStyle]="{
-                                            backgroundColor: pixel.color,
-                                        }"
-                                    ></div>
-                                    <div
-                                        class="paintedBg"
-                                        [ngStyle]="{
-                                            backgroundColor: pixel.painted?.color ?? 'transparent',
-                                        }"
-                                        [ngClass]="{ incorrect: pixel.painted ? !pixel.painted.isCorrect : true }"
-                                    ></div>
-                                    <div
-                                        class="num"
-                                        [ngStyle]="{
-                                            color: activeColor + 1 === pixel.num ? '#101010' : pixel.painted ? pixel.textColor : undefined,
-                                        }"
-                                    >
-                                        {{ pixel.num }}
-                                    </div>
-                                </button>
-                            }
-                        </div>
-                    }
-                </div>
+                                    {{ pixel.num }}
+                                </div>
+                            </button>
+                        }
+                    </div>
+                }
             </div>
         </div>
         <pixelart-art-item-bottom-bar

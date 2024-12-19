@@ -18,6 +18,34 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: $gap-s;
+            width: 100%;
+            height: fit-content;
+
+            .art-container {
+                position: relative;
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1/1;
+
+                .art {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: auto;
+                    aspect-ratio: 1/1;
+                    filter: grayscale(1);
+                }
+
+                .saved-art {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: auto;
+                    aspect-ratio: 1/1;
+                }
+            }
         }
     }
 }

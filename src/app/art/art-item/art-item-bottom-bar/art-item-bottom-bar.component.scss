@@ -29,9 +29,9 @@
             gap: $gap-s;
             width: fit-content;
             height: 100%;
-            
+
             padding: $gap-s $gap-m;
-    
+
             button.color {
                 display: flex;
                 justify-content: center;
@@ -44,25 +44,25 @@
                 border-radius: 50%;
                 overflow: hidden;
                 cursor: pointer;
-    
+
                 &.active > .bg {
                     opacity: 1;
                     filter: brightness(1);
                     border-color: $color-black;
                 }
-    
+
                 &.isComplete {
                     .bg {
                         opacity: 1;
                         filter: brightness(1);
                         border-color: $color-black;
                     }
-    
+
                     .number > strong {
                         color: transparent;
                     }
                 }
-    
+
                 .bg {
                     position: absolute;
                     left: 0;
@@ -75,7 +75,7 @@
                     filter: brightness(0.2);
                     transition: all $anim-time $anim-mode;
                 }
-    
+
                 .number {
                     display: flex;
                     justify-content: center;
