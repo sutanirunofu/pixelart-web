@@ -109,11 +109,6 @@ export class ArtItemPageComponent implements OnInit {
             this.paintedPixelsCount = 0;
         }
 
-        // if (pixel.painted !== undefined && pixel.color !== "transparent") {
-        //     pixel.painted = undefined;
-        //     return;
-        // }
-
         pixel.painted = {
             num: this.activeColor,
             color: this.colors[this.activeColor].value,
@@ -166,8 +161,6 @@ export class ArtItemPageComponent implements OnInit {
 
                 savedArt.map.forEach((row, y) => {
                     row.forEach((col, x) => {
-                        // console.log(this.pixelMap[y][x].num, col);
-
                         this.pixelMap[y][x].painted = {
                             num: col + 1,
                             color: this.getColor(savedArt.art.colors[col - 1]),

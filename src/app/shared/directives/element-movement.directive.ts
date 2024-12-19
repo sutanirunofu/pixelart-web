@@ -21,7 +21,6 @@ export class ElementMovementDirective {
         this.initialX = this.el.nativeElement.offsetLeft;
         this.initialY = this.el.nativeElement.offsetTop;
 
-        // Prevent text selection
         event.preventDefault();
     }
 
@@ -45,7 +44,6 @@ export class ElementMovementDirective {
         this.isDragging = false;
     }
 
-    // Touch events for mobile devices
     @HostListener("touchstart", ["$event"])
     onTouchStart(event: TouchEvent) {
         if (event.touches.length !== 2) return;
@@ -56,7 +54,6 @@ export class ElementMovementDirective {
         this.initialX = this.el.nativeElement.offsetLeft;
         this.initialY = this.el.nativeElement.offsetTop;
 
-        // Prevent default touch behavior
         event.preventDefault();
     }
 
