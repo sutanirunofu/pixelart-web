@@ -1,13 +1,17 @@
 import { Routes } from "@angular/router";
 
+import { authGuard } from "./shared/guards/auth.guard";
+
 export const routes: Routes = [
     {
         path: "arts",
         loadComponent: () => import("./art/art-page.component").then((m) => m.ArtPageComponent),
+        canActivate: [authGuard],
     },
     {
         path: "arts/:id",
         loadComponent: () => import("./art/art-item/art-item-page.component").then((m) => m.ArtItemPageComponent),
+        canActivate: [authGuard],
     },
     {
         path: "user",
@@ -16,6 +20,7 @@ export const routes: Routes = [
     {
         path: "saved-arts",
         loadComponent: () => import("./saved-art/saved-art-page.component").then((m) => m.SavedArtPageComponent),
+        canActivate: [authGuard],
     },
     {
         path: "login",
