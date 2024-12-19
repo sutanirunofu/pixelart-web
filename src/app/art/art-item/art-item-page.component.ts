@@ -93,8 +93,10 @@ export class ArtItemPageComponent implements OnInit {
     public paint(event: Event, row: number, column: number): void {
         event.stopPropagation();
 
-        if (!this.isSaved && this.currentArtId) {
-            this.savedArtService.saveByArtId(this.currentArtId, { map: [], isComplete: false });
+        if (this.isSaved === false && this.currentArtId !== undefined) {
+            this.savedArtService.saveByArtId(this.currentArtId, { map: [], isComplete: false }).subscribe(() => {
+                this.isSaved = true;
+            });
         }
 
         if (this.isComplete) return;
@@ -110,7 +112,7 @@ export class ArtItemPageComponent implements OnInit {
         }
 
         pixel.painted = {
-            num: this.activeColor,
+            num: this.activeColor + 1,
             color: this.colors[this.activeColor].value,
             isCorrect: pixel.num === this.activeColor + 1,
         };
@@ -161,8 +163,10 @@ export class ArtItemPageComponent implements OnInit {
 
                 savedArt.map.forEach((row, y) => {
                     row.forEach((col, x) => {
+                        if (col === 0) return;
+
                         this.pixelMap[y][x].painted = {
-                            num: col + 1,
+                            num: col,
                             color: this.getColor(savedArt.art.colors[col - 1]),
                             isCorrect: this.pixelMap[y][x].num === col,
                         };
@@ -276,7 +280,8 @@ export class ArtItemPageComponent implements OnInit {
             return;
         }
 
-        const map: number[][] = this.pixelMap.map((row) => row.map((p) => p.painted === undefined ? 0 : p.num));
+        const map: number[][] = this.pixelMap.map((row) => row.map((p) => (p.painted !== undefined ? p.painted.num : 0)));
+
         this.savedArtService.updateByArtId(this.currentArtId, { map, isComplete: this.isComplete }).subscribe();
     }
 }
