@@ -276,7 +276,7 @@ export class ArtItemPageComponent implements OnInit {
             return;
         }
 
-        const map: number[][] = this.pixelMap.map((row) => row.map((p) => p.num));
+        const map: number[][] = this.pixelMap.map((row) => row.map((p) => p.painted === undefined ? 0 : p.num));
         this.savedArtService.updateByArtId(this.currentArtId, { map, isComplete: this.isComplete }).subscribe();
     }
 }
