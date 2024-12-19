@@ -25,18 +25,11 @@
                 position: relative;
                 width: 100%;
                 height: auto;
+                border-radius: $border-radius-m;
                 aspect-ratio: 1/1;
+                overflow: hidden;
 
-                .art {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                    height: auto;
-                    aspect-ratio: 1/1;
-                    filter: grayscale(1);
-                }
-
+                .art,
                 .saved-art {
                     position: absolute;
                     left: 0;
@@ -44,6 +37,10 @@
                     width: 100%;
                     height: auto;
                     aspect-ratio: 1/1;
+                }
+
+                .art {
+                    filter: grayscale(1);
                 }
             }
         }
