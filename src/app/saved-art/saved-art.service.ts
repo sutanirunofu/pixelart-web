@@ -43,20 +43,17 @@ export class SavedArtService {
         );
     }
 
-    public saveByArtId(id: string, dto: CreateSavedArtDTO): void {
-        this.http
-            .post<UpdateSavedArtDTO, never>(`${this.SAVED_ARTS_BASE_PATH}/${id}`, dto)
-            .pipe(
-                first(),
-                map(() => {
-                    console.log("SavedPost has been created successful: ");
-                }),
-                catchError((err) => {
-                    console.error(err);
-                    throw err;
-                }),
-            )
-            .subscribe();
+    public saveByArtId(id: string, dto: CreateSavedArtDTO): Observable<void> {
+        return this.http.post<UpdateSavedArtDTO, never>(`${this.SAVED_ARTS_BASE_PATH}/${id}`, dto).pipe(
+            first(),
+            map(() => {
+                console.log("SavedPost has been created successful: ");
+            }),
+            catchError((err) => {
+                console.error(err);
+                throw err;
+            }),
+        );
     }
 
     public updateByArtId(id: string, dto: UpdateSavedArtDTO): Observable<SavedArt> {
