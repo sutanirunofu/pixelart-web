@@ -69,7 +69,7 @@ export class ArtItemPageComponent implements OnInit {
             this.zoom -= this.ZOOM_STEP;
         }
 
-        this.isSimple = this.zoom > (this.ZOOM_MIN + 0.4);
+        this.isSimple = this.zoom > this.ZOOM_MIN + 0.4;
     }
 
     onTouchStart(event: TouchEvent) {
