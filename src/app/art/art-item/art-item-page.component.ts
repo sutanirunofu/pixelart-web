@@ -24,6 +24,7 @@ export class ArtItemPageComponent implements OnInit {
     public activeColor = 0;
     public isComplete = false;
     public hasChanges = false;
+    public isSimple = false;
 
     public zoom = 1;
     public lastScale = 1;
@@ -67,6 +68,8 @@ export class ArtItemPageComponent implements OnInit {
         } else if (this.zoom >= this.ZOOM_MIN) {
             this.zoom -= this.ZOOM_STEP;
         }
+
+        this.isSimple = this.zoom > (this.ZOOM_MIN + 0.4);
     }
 
     onTouchStart(event: TouchEvent) {
