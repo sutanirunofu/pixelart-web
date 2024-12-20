@@ -118,6 +118,10 @@
                             }
                         }
 
+                        &.isSimple.painted > .num {
+                            color: transparent !important;
+                        }
+
                         &:last-child {
                             border-right: 1px solid $color-gray;
                         }
