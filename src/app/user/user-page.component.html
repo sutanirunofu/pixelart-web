@@ -13,8 +13,8 @@
         </div>
         <div class="buttons">
             @if (authorized$ | async) {
-                <button>Импортировать рисунок</button>
-                <button>Настройки</button>
+                <!-- <button>Импортировать рисунок</button> -->
+                <!-- <button>Настройки</button> -->
                 <button (click)="logout()" class="logout">Выйти</button>
             } @else {
                 <button (click)="login()" class="login">Войти</button>

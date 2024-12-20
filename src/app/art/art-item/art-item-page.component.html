@@ -28,6 +28,7 @@
                                 [ngClass]="{
                                     active: activeColor + 1 === pixel.num,
                                     painted: pixel.painted?.isCorrect,
+                                    isSimple,
                                 }"
                                 [ngStyle]="{
                                     width: PIXEL_SIZE + 'px',
@@ -50,7 +51,12 @@
                                 <div
                                     class="num"
                                     [ngStyle]="{
-                                        color: activeColor + 1 === pixel.num ? '#101010' : pixel.painted ? pixel.textColor : undefined,
+                                        color:
+                                            activeColor + 1 === pixel.num
+                                                ? '#101010'
+                                                : pixel.painted !== undefined
+                                                  ? pixel.textColor
+                                                  : getTextColor(pixel.color),
                                     }"
                                 >
                                     {{ pixel.num }}
