@@ -86,6 +86,8 @@ export class ArtItemPageComponent implements OnInit {
         if (nextZoom <= this.ZOOM_MAX && nextZoom >= this.ZOOM_MIN) {
             this.zoom = nextZoom;
         }
+
+        this.isSimple = this.zoom > this.ZOOM_MIN + 0.4;
     }
 
     onTouchEnd() {
