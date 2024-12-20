@@ -78,6 +78,10 @@
 
                     .row > button {
                         border: none !important;
+
+                        .num {
+                            color: transparent !important;
+                        }
                     }
                 }
 
@@ -105,7 +109,7 @@
                                 }
 
                                 .num {
-                                    color: $color-black !important;
+                                    color: $color-black;
                                 }
                             }
 
