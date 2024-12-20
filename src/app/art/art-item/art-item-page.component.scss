@@ -118,8 +118,8 @@
                             }
                         }
 
-                        &.isSimple.painted > .num {
-                            color: transparent !important;
+                        &.isSimple:not(.painted) > .num {
+                            color: $color-black !important;
                         }
 
                         &:last-child {
