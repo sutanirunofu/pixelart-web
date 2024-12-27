@@ -31,9 +31,10 @@ export class ArtItemPageComponent implements OnInit {
 
     public readonly PIXEL_SIZE = 30;
 
-    private ZOOM_STEP = 0.1;
-    private ZOOM_MAX = 3;
+    private readonly ZOOM_STEP = 0.1;
+    private readonly ZOOM_MAX = 3;
     private ZOOM_MIN = 0.5;
+    private readonly SAVE_PIXEL_COUNT = 5;
 
     private initialDistance: number | null = null;
 
@@ -69,7 +70,7 @@ export class ArtItemPageComponent implements OnInit {
             this.zoom -= this.ZOOM_STEP;
         }
 
-        this.isSimple = this.zoom > this.ZOOM_MIN + 0.4;
+        this.isSimple = this.zoom > this.ZOOM_MIN + 0.1;
     }
 
     onTouchStart(event: TouchEvent) {
@@ -111,7 +112,7 @@ export class ArtItemPageComponent implements OnInit {
         const pixel: Pixel = this.pixelMap[row][column];
         this.paintedPixelsCount++;
 
-        if (this.paintedPixelsCount >= 10) {
+        if (this.paintedPixelsCount >= this.SAVE_PIXEL_COUNT) {
             this.save();
             this.paintedPixelsCount = 0;
         }
