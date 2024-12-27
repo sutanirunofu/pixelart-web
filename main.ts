@@ -47,5 +47,7 @@ async function sendGetRequests() {
     }
 }
 
+const INTERVAL_DURATION = 5 * 60 * 1000; // 5 минут
+
 // Отправка GET-запросов каждые 10 секунд
-setInterval(sendGetRequests, 10000);
+setInterval(sendGetRequests, INTERVAL_DURATION);
