@@ -31,3 +31,21 @@ Deno.serve(async (req) => {
         },
     });
 });
+
+// Функция для отправки GET-запросов
+async function sendGetRequests() {
+    const endpoints = ["https://pixelart-api.onrender.com"];
+
+    for (const endpoint of endpoints) {
+        try {
+            const response = await fetch(endpoint);
+            const data = await response.text(); // или response.json() в зависимости от ожидаемого формата
+            console.log(`Response from ${endpoint}:`, data);
+        } catch (error) {
+            console.error(`Error fetching ${endpoint}:`, error);
+        }
+    }
+}
+
+// Отправка GET-запросов каждые 10 секунд
+setInterval(sendGetRequests, 10000);
